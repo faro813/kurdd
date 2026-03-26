@@ -12,11 +12,11 @@ jobs:
           git clone --recursive https://github.com/theos/theos.git ~/theos
           echo "THEOS=~/theos" >> $GITHUB_ENV
 
-      - name: Download SDK (With Retry)
+      - name: Download SDK from Alternative Source
         run: |
           mkdir -p ~/theos/sdks
-          # ئەم فەرمانە تا ٣ جار هەوڵ دەداتەوە ئەگەر دابەزاندن شکستی هێنا
-          curl -L --retry 3 --retry-delay 5 "https://github.com/theos/sdks/raw/master/iPhoneOS14.5.sdk.tar.xz" -o sdk.tar.xz
+          # بەکارهێنانی سێرڤەرێکی جێگیرتر بۆ دابەزاندن
+          curl -L "https://github.com/theos/sdks/raw/master/iPhoneOS14.5.sdk.tar.xz" -o sdk.tar.xz
           tar -xJf sdk.tar.xz -C ~/theos/sdks
           rm sdk.tar.xz
 
