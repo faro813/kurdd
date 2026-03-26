@@ -7,18 +7,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Theos
-        uses: theos/setup-theos@v1
-        with:
-          version: 'master'
+      - name: Install Theos
+        run: |
+          export THEOS=~/theos
+          bash -c "$(curl -fsSL https://raw.githubusercontent.com/theos/theos/master/bin/install-theos)"
+          echo "THEOS=$THEOS" >> $GITHUB_ENV
+
+      - name: Download SDK
+        run: |
+          mkdir -p ~/theos/sdks
+          curl -L https://github.com/theos/sdks/raw/master/iPhoneOS14.5.sdk.tar.xz | tar -xJ -C ~/theos/sdks
 
       - name: Build Tweak
         run: |
-          # لێرەدا ڕێگری دەکات لە هەر ئیرۆرێکی نەخوازراو
+          export THEOS=~/theos
           make package FINALPACKAGE=1
           
-      - name: Upload Artifact
+      - name: Upload Dylib
         uses: actions/upload-artifact@v4
         with:
           name: KurdApp-Final-Dylib
-          path: packages/*.deb
+          path: .theos/obj/*.dylib
