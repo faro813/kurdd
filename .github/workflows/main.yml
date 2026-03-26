@@ -6,15 +6,17 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Theos
         run: |
+          export THEOS=~/theos
           bash -c "$(curl -fsSL https://raw.githubusercontent.com/theos/theos/master/bin/install-theos)"
-          echo "THEOS=~/theos" >> $GITHUB_ENV
+          curl -L https://github.com/theos/sdks/raw/master/iPhoneOS16.5.sdk.tar.xz | tar -xJ -C $THEOS/sdks
+          echo "THEOS=$THEOS" >> $GITHUB_ENV
 
       - name: Build Dylib
         run: |
