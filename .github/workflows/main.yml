@@ -1,23 +1,15 @@
-name: Build KurdApp Dylib
+name: Build KurdApp
 on: [push, workflow_dispatch]
-
 jobs:
   build:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Setup Theos
-        run: |
-          bash -c "$(curl -fsSL https://raw.githubusercontent.com/theos/theos/master/bin/install-theos)"
-          echo "THEOS=~/theos" >> $GITHUB_ENV
-
+        uses: theos/setup-theos@master
       - name: Build Tweak
         run: |
-          export THEOS=~/theos
-          # ئەم دێڕە ڕێگری دەکات لە وەستان بەهۆی نەبوونی SDK
-          make package FINALPACKAGE=1 SDKVERSION=14.5
-          
+          make package FINALPACKAGE=1
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
