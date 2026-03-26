@@ -9,16 +9,14 @@ jobs:
 
       - name: Install Theos
         run: |
-          git clone --recursive https://github.com/theos/theos.git ~/theos
+          bash -c "$(curl -fsSL https://raw.githubusercontent.com/theos/theos/master/bin/install-theos)"
           echo "THEOS=~/theos" >> $GITHUB_ENV
 
-      - name: Download SDK from Alternative Source
+      - name: Extract Manual SDK
         run: |
           mkdir -p ~/theos/sdks
-          # بەکارهێنانی سێرڤەرێکی جێگیرتر بۆ دابەزاندن
-          curl -L "https://github.com/theos/sdks/raw/master/iPhoneOS14.5.sdk.tar.xz" -o sdk.tar.xz
-          tar -xJf sdk.tar.xz -C ~/theos/sdks
-          rm sdk.tar.xz
+          # لێرەدا فایلەکە لە ناو پڕۆژەکەی خۆتەوە دەردەهێنێت
+          tar -xJf iPhoneOS14.5.sdk.tar.xz -C ~/theos/sdks
 
       - name: Build Tweak
         run: |
