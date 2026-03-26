@@ -12,12 +12,13 @@ jobs:
         with:
           version: 'master'
 
-      - name: Build Project
+      - name: Build Tweak
         run: |
+          # لێرەدا ڕێگری دەکات لە هەر ئیرۆرێکی نەخوازراو
           make package FINALPACKAGE=1
           
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: KurdApp-Final-Dylib
-          path: .theos/obj/*.dylib
+          path: packages/*.deb
