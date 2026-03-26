@@ -12,12 +12,18 @@ jobs:
           bash -c "$(curl -fsSL https://raw.githubusercontent.com/theos/theos/master/bin/install-theos)"
           echo "THEOS=~/theos" >> $GITHUB_ENV
 
+      - name: Download SDK
+        run: |
+          # دابەزاندنی SDK بە شێوەی ڕاستەوخۆ بۆ ناو فۆڵدەری مەبەست
+          mkdir -p ~/theos/sdks
+          curl -L https://github.com/theos/sdks/raw/master/iPhoneOS14.5.sdk.tar.xz | tar -xJ -C ~/theos/sdks
+
       - name: Build Project
         run: |
           export THEOS=~/theos
           make package FINALPACKAGE=1
           
-      - name: Upload Dylib
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: KurdApp-Final-Dylib
