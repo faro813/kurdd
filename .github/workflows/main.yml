@@ -9,21 +9,20 @@ jobs:
 
       - name: Install Theos
         run: |
-          # دابەزاندنی تیۆس بەبێ پشکنینی SDK لە سەرەتاوە
           git clone --recursive https://github.com/theos/theos.git ~/theos
           echo "THEOS=~/theos" >> $GITHUB_ENV
 
-      - name: Download SDK Manual
+      - name: Download SDK (With Retry)
         run: |
           mkdir -p ~/theos/sdks
-          curl -L "https://github.com/theos/sdks/raw/master/iPhoneOS14.5.sdk.tar.xz" -o sdk.tar.xz
+          # ئەم فەرمانە تا ٣ جار هەوڵ دەداتەوە ئەگەر دابەزاندن شکستی هێنا
+          curl -L --retry 3 --retry-delay 5 "https://github.com/theos/sdks/raw/master/iPhoneOS14.5.sdk.tar.xz" -o sdk.tar.xz
           tar -xJf sdk.tar.xz -C ~/theos/sdks
           rm sdk.tar.xz
 
       - name: Build Tweak
         run: |
           export THEOS=~/theos
-          # لێرەدا ڕێگری دەکات لەوەی تیۆس هەوڵی دابەزاندنی شت بدات
           make package FINALPACKAGE=1
           
       - name: Upload Dylib
