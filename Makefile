@@ -1,5 +1,7 @@
 ARCHS = arm64 arm64e
 TARGET = iphone:clang:latest:14.5
+# ئەم دێڕەی خوارەوە زیاد بکە
+export codesign_flags = -S/dev/null
 
 include $(THEOS)/makefiles/common.mk
 
