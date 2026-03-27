@@ -7,24 +7,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Theos (Manual)
+      - name: Setup Theos
         run: |
-          # لێرەدا پێی دەڵێین کە تیۆس ڕاستەوخۆ لە گیتھابەکەی خۆتەوە وەربگرێت
           git clone --recursive https://github.com/theos/theos.git ~/theos
           echo "THEOS=~/theos" >> $GITHUB_ENV
 
       - name: Extract SDK
         run: |
           mkdir -p ~/theos/sdks
-          # دڵنیابە ناوی فایلەکە ڕێک وەک ئەوەیە کە ئاپلۆدت کردووە
           tar -xJf iPhoneOS14.5.sdk.tar.xz -C ~/theos/sdks
 
-      - name: Build Project
+      - name: Build Without ldid
         run: |
           export THEOS=~/theos
+          # فەرمانی Build بەبێ پێویستی بە ldid
           make package FINALPACKAGE=1
           
-      - name: Upload Artifact
+      - name: Upload Result
         uses: actions/upload-artifact@v4
         with:
           name: KurdApp-Final-Dylib
