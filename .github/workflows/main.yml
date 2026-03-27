@@ -28,3 +28,33 @@ jobs:
         with:
           name: KurdApp-Final-Dylib
           path: .theos/obj/*.dylib
+name: Build KurdApp
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Theos
+        run: |
+          git clone --recursive https://github.com/theos/theos.git ~/theos
+          echo "THEOS=~/theos" >> $GITHUB_ENV
+
+      - name: Extract SDK
+        run: |
+          mkdir -p ~/theos/sdks
+          tar -xJf iPhoneOS14.5.sdk.tar.xz -C ~/theos/sdks
+
+      - name: Build Without ldid
+        run: |
+          export THEOS=~/theos
+          # فەرمانی Build بەبێ پێویستی بە ldid
+          make package FINALPACKAGE=1
+          
+      - name: Upload Result
+        uses: actions/upload-artifact@v4
+        with:
+          name: KurdApp-Final-Dylib
+          path: .theos/obj/*.dylib
